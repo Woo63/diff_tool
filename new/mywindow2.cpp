@@ -9,7 +9,7 @@
 MyWindow2::MyWindow2(QString s11, QString s21)
     : QDialog()
 {
-  Ui_MyWindow2 *ui2 = new Ui_MyWindow2();
+  ui2 = new Ui::MyWindow2();
   ui2->setupUi(this);
   ui2->l1->setText(s11);
   ui2->l2->setText(s21);

@@ -9,6 +9,7 @@
 #ifndef UI_PROVERKA_H
 #define UI_PROVERKA_H
 
+#include <QtCore/QLocale>
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
@@ -111,6 +112,8 @@ public:
         lineEdit = new QLineEdit(Proverka);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setGeometry(QRect(40, 160, 221, 20));
+        lineEdit->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
+        lineEdit->setInputMethodHints(Qt::ImhLatinOnly);
         pushButton = new QPushButton(Proverka);
         pushButton->setObjectName(QStringLiteral("pushButton"));
         pushButton->setGeometry(QRect(280, 160, 75, 23));

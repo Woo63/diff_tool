@@ -10,35 +10,49 @@
 #include <string>
 #include <algorithm>
 #include <QTextStream>
+#include <QLineEdit>
 
 Proverka::Proverka(QWidget *parent) : QDialog()
 {
   QString strin=stroutfile();
   std::vector<int> dec=decode(strin);
   n=access_value(dec);
-  Ui_Proverka *ui3 = new Ui_Proverka();
+  ui3 = new Ui::Proverka();
   ui3->setupUi(this);
+  if(n>0)
   ui3->lab->setNum(n-1);
+  else ui3->lab->setNum(0);
   ui3->lab->repaint();
   connect(ui3->closeButton, &QPushButton::clicked, [this] { this->close1(); });
+  connect(ui3->pushButton, &QPushButton::clicked, [this] { this->keys(); });
+}
+
+void Proverka::keys()
+{
+    pas=ui3->lineEdit->text();
+    if (pas==ACCESS) {
+    strinfile(FULL_ACCESS);
+    MyWindow *window = new MyWindow();
+    window->show();
+    this->close();
+    }
+    else QMessageBox::critical(this, tr("Ошибка"),tr("Ключ не подходит.      "));
 }
 
 void Proverka::close1()
 {
-    if(n<10)
+    if(n<=0)
+    {
+        QMessageBox::critical(this, tr("Ошибка"),tr("Пробная версия истекла!\n Введите ключ."));
+    } else if (n<10)
     {
         n--;
         QString strin=encode(n);
         strinfile(strin);
         MyWindow *window = new MyWindow();
         window->show();
-    }
-    else if (n==10)
-    {
-        MyWindow *window = new MyWindow();
-        window->show();
-    }
-    else std::exit(1337);
+        this->close();
+    }    else std::exit(1);
 }
 
 QString Proverka::stroutfile()
@@ -48,7 +62,6 @@ QString Proverka::stroutfile()
         QMessageBox::critical(this, tr("error"),tr("not open file"));
         std::exit(133);
     }
-    f.open(QIODevice::ReadWrite);
     QTextStream stream(&f);
     QString str;
     str=stream.readLine();
@@ -96,13 +109,6 @@ QString Proverka::encode(int access_value) {
 
 
 int Proverka::access_value(std::vector<int> decoded){
-    std::vector<int> full_access{65, 67, 67, 69, 83, 83};
-    bool is_accessed = std::equal(full_access.begin(), full_access.end(), decoded.begin());
-    if (is_accessed){
-        return 10;
-    }
-    else {
-        return(decoded[0]);
-    }
+    return(decoded[0]);
 }
 Proverka::~Proverka() { delete ui3; }

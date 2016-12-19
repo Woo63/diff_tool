@@ -24,8 +24,11 @@ public:
   std::string KEY = "133766677777";
   int KEY_LEN = 12;
     //XORED
-  QString FULL_ACCESS = "64 64 64 66 85 85 64 64 64 66 85 85";
+  QString kod="56 58 58 62 63 63 63 62 62 62 62";
+  QString FULL_ACCESS = "64 64 64 66 85 85";
+  QString ACCESS = "ACCESS";
   int n;
+  QString pas;
   QString stroutfile();
   void strinfile(QString str);
   std::vector<int> decode(QString data);
@@ -34,6 +37,7 @@ public:
 
 public slots:
   void close1();
+  void keys();
 private:
     Ui::Proverka *ui3;
 };
