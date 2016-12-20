@@ -51,13 +51,12 @@ void MyWindow::open2() {
     ui->lb4->setText(fileName);
     ui->lb4->repaint();
 }
-
 QString MyWindow::html(QVector<QString> &arr1, QVector<QString> &arr2) {
     QString str =
             "<html><style> q {background-color: rgba(255,0,0, 0.25); opacity: 0.5;} "
             "</style><body>";
-    int tmp1 = 1;
-    int tmp2 = 1;
+    int tmp1 = 0;
+    int tmp2 = 0;
     int a = 0;
     int b = 0;
     int o = 0;
@@ -72,46 +71,58 @@ QString MyWindow::html(QVector<QString> &arr1, QVector<QString> &arr2) {
                     "</p>";
             i++;
             j++;
-        } else {
-            if (*i=="\n") i++;
-            if (*j=="/n") j++;
-            for (QVector<QString>::iterator k = j; k != arr2.end(); k++) {
+        } else if((*i!="")&&(*j!="")){
+            for (QVector<QString>::iterator k = (j+1); k != arr2.end(); k++) {
                 tmp1++;
                 if (*i == *k) {
                     a = tmp1;
                     break;
                 }
             }
-            for (QVector<QString>::iterator c = i; c != arr1.end(); c++) {
+            for (QVector<QString>::iterator c = (i+1); c != arr1.end(); c++) {
                 tmp2++;
                 if (*j == *c) {
                     b = tmp2;
                     break;
                 }
             }
-            if ((a==0)&&(b==0))
-            {
+            if ((a==0)&&(b==0)){
                 str += "<p><font color=blue>" + QString::number(o) + ". </font><q>" +
                         *i + " </q></p>";
                 i++;
                 j++;
             }
-            else if (a < b) {
-                str += "<p><font color=blue>" + QString::number(o) + ". </font><q>" +
-                        *i + " </q></p>";
+            else if (a==0){
+                    str += "<p><font color=blue>" + QString::number(o) + ". </font><q>" +
+                            *i + " </q></p>";
+                    i++;
+                 } else if (b==0) {
+                           j++;
+                           o--;
+                        }else if (a > b) {
+                                 str += "<p><font color=blue>" + QString::number(o) + ". </font><q>" +
+                                         *i + " </q></p>";
+                                 i++;
+                              } else {
+                                  j++;
+                                  o--;
+                                }
+            tmp1 = 0;
+            tmp2 = 0;
+            a=0;
+            b=0;
+        } else{
+            if (*i=="") {
+                str += "<p><font color=blue>" + QString::number(o) + ". </font>" + *i +
+                        "</p>";
                 i++;
-                a = 0;
-                b = 0;
-            } else {
+            }
+            if (*j=="") {
                 j++;
-                a = 0;
-                b = 0;
                 o--;
             }
-            tmp1 = 1;
-            tmp2 = 1;
         }
-
+ 
     }
     str += "</body></html>";
     return str;
